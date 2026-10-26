@@ -1,0 +1,13 @@
+[Unit]
+Description=Fan Control Service
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/opt/fan-control/scripts/fan_control.sh
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target
