@@ -3,7 +3,7 @@ set -euo pipefail
 
 echo "=== Fan Identifier ==="
 echo "Listing hwmon devices:"
-mapfile -t devs < <(find /sys/class/hwmon -maxdepth 1 -type d -name 'hwmon*' | sort)
+mapfile -t devs < <(find /sys/class/hwmon -maxdepth 1 -type l -name 'hwmon*' | sort)
 declare -A names
 for d in "${devs[@]}"; do
   if [[ -f "$d/name" ]]; then
@@ -63,9 +63,18 @@ for i in "${pwms[@]}"; do
   fi
   if [[ "$ans" =~ ^[Yy] ]]; then
     echo "Selected PWM $i as target"
-    echo "DRIVER_NAME=$DRIVER" 
-    echo "HWMON_DIR=$HWMON"
+    echo "DRIVER_NAME=$DRIVER"
     echo "TARGET_PWM_INDEX=$i"
+    read -rp "Save to config/config.conf? [y/N] " save_ans
+    if [[ "$save_ans" =~ ^[Yy] ]]; then
+      CONF_FILE="$(dirname "$0")/../config/config.conf"
+      if [[ ! -f "$CONF_FILE" ]]; then
+        cp "$(dirname "$0")/../config/config.example.conf" "$CONF_FILE"
+      fi
+      sed -i "s/^DRIVER_NAME=.*/DRIVER_NAME=\"$DRIVER\"/" "$CONF_FILE"
+      sed -i "s/^TARGET_PWM_INDEX=.*/TARGET_PWM_INDEX=$i/" "$CONF_FILE"
+      echo "Saved to $CONF_FILE"
+    fi
     exit 0
   fi
 done
