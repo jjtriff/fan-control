@@ -5,11 +5,12 @@ echo "=== Fan Identifier ==="
 echo "Listing hwmon devices:"
 mapfile -t devs < <(find /sys/class/hwmon -maxdepth 1 -type l -name 'hwmon*' | sort)
 declare -A names
-for d in "${devs[@]}"; do
+for i in "${!devs[@]}"; do
+  d="${devs[$i]}"
   if [[ -f "$d/name" ]]; then
     name=$(cat "$d/name")
     names["$d"]="$name"
-    echo "  $d -> $name"
+    echo "  [$i] $d -> $name"
   fi
 done
 
@@ -19,9 +20,9 @@ if [[ ${#devs[@]} -eq 0 ]]; then
 fi
 
 echo
-read -rp "Enter hwmon path (e.g., /sys/class/hwmon/hwmon3) or number [1-${#devs[@]}]: " sel
-if [[ "$sel" =~ ^[0-9]+$ ]] && (( sel >=1 && sel <= ${#devs[@]} )); then
-  HWMON="${devs[$((sel-1))]}"
+read -rp "Enter hwmon path (e.g., /sys/class/hwmon/hwmon3) or number [0-$((${#devs[@]}-1))]: " sel
+if [[ "$sel" =~ ^[0-9]+$ ]] && (( sel >=0 && sel < ${#devs[@]} )); then
+  HWMON="${devs[$sel]}"
 elif [[ -d "$sel" ]]; then
   HWMON="$sel"
 else
@@ -65,16 +66,6 @@ for i in "${pwms[@]}"; do
     echo "Selected PWM $i as target"
     echo "DRIVER_NAME=$DRIVER"
     echo "TARGET_PWM_INDEX=$i"
-    read -rp "Save to config/config.conf? [y/N] " save_ans
-    if [[ "$save_ans" =~ ^[Yy] ]]; then
-      CONF_FILE="$(dirname "$0")/../config/config.conf"
-      if [[ ! -f "$CONF_FILE" ]]; then
-        cp "$(dirname "$0")/../config/config.example.conf" "$CONF_FILE"
-      fi
-      sed -i "s/^DRIVER_NAME=.*/DRIVER_NAME=\"$DRIVER\"/" "$CONF_FILE"
-      sed -i "s/^TARGET_PWM_INDEX=.*/TARGET_PWM_INDEX=$i/" "$CONF_FILE"
-      echo "Saved to $CONF_FILE"
-    fi
     exit 0
   fi
 done
