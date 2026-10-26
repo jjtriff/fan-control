@@ -16,6 +16,11 @@ sudo apt install lm-sensors
 - Systemd service for background control
 - Configurable thermal profile
 
+## Why this exists
+This project came about because I wanted to cool down a Tesla P40 https://link.amazon/B0axQekJj that I got for my home-grown AI lab, and got this Noctua NF-P12 fan https://link.amazon/B0079YdCi which I had to funnel via this Adapter https://link.amazon/B02lmlPL8 and hooked it to my board via the Chassis Fan Connector 2.
+
+*Disclaimer: I may earn a commission via the links above. If you would like to support me I'm very grateful.*
+
 ## Install
 ```bash
 sudo bash install.sh
