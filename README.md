@@ -2,6 +2,14 @@
 
 Identify and control motherboard fans via hwmon PWM.
 
+> **Disclaimer:** This software is provided as-is without any warranty, express or implied. Use at your own risk. It may modify hardware PWM settings which can affect system cooling and hardware safety.
+
+## Prerequisites
+This software depends on `lm-sensors` and hwmon support in the kernel. On Debian/Ubuntu install with:
+```bash
+sudo apt install lm-sensors
+```
+
 ## Features
 - Auto-discover hwmon driver
 - Interactive fan identification wizard
