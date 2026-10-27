@@ -38,3 +38,9 @@ sudo systemctl enable fan-control.service
 - `scripts/fan_control.sh` - main control loop
 - `scripts/identify_fan.sh` - interactive identification
 - `config/config.example.conf` - example config
+
+## Unnecessary picture
+
+Say hi to the card, the fan and the funnel:
+
+![nvidia Tesla P40](https://lh3.googleusercontent.com/pw/AP1GczPNiXQWa_Plun6T3oJNkD1Gtwr61Y2GEet60nk_oREiro_Sp_dexNlOFibhrzPR6rDdQQNuwXuF9JZjSkscQxomvSEG4OP_eu50irALezhi230NsPmrtB93ejNl7fwJU2137B9N_jONi-Knx8cXnQVPjg=w744-h1323-s-no-gm?authuser=0)
